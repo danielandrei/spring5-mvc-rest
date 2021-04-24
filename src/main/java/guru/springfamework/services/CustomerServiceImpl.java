@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll().stream()
                 .map(customer -> {
                     CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-                    customerDTO.setCustomerUrl("/api/v1/customer/" + customer.getId());
+                    customerDTO.setCustomerUrl("/api/v1/customers/" + customer.getId());
                     return customerDTO;
                 })
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         CustomerDTO resultDTO = customerMapper.customerToCustomerDTO(savedCustomer);
 
-        resultDTO.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
+        resultDTO.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
 
         return resultDTO;
     }

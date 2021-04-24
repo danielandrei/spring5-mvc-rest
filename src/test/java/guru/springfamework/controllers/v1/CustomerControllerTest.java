@@ -17,14 +17,14 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CustomerControllerTest {
+public class CustomerControllerTest implements RestControllerTest {
     public static final String NAME = "Jim";
 
     @Mock
@@ -75,6 +75,23 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo("f1")));
+    }
+
+    @Test
+    public void createNewCustomer() throws Exception {
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstName("f1");
+        customer.setLastName("l1");
+        customer.setCustomerUrl("/api/v1/customers/1");
+
+        when(customerService.createNewCustomer(any(CustomerDTO.class))).thenReturn(customer);
+
+        mockMvc.perform(post("/api/v1/customers/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customer)))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.firstName", equalTo("f1")))
+            .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
     }
 
 }
