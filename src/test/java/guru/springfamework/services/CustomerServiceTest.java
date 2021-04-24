@@ -62,6 +62,6 @@ public class CustomerServiceTest {
 
         assertEquals(FIRST_NAME, customerDTO.getFirstName());
         assertEquals(LAST_NAME, customerDTO.getLastName());
-
     }
+
 }
